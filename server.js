@@ -29,46 +29,33 @@ app.get("/api/:date", (req, res) => {
   var output = {};
   try {
     var date = new Date(input);
+    var dateUnix = new Date(parseInt(input));
+    //check if input is in a valid date format
     //if successful - its unix maybe?
-    output = {
-      unix: date.getTime(),
-      utc: date.toUTCString(),
-    };
+    if (date != "Invalid Date") {
+      //we are dealing with a valid date
+      console.log("its date");
+      var output = {
+        unix: date.getTime(),
+        utc: date.toUTCString(),
+      };
+      res.json(output);
+    } else if (dateUnix != "Invalid Date") {
+      //we are dealing with a unix
+      console.log("its unix", dateUnix);
+      var output = {
+        unix: dateUnix.getTime(),
+        utc: dateUnix.toUTCString(),
+      };
+      res.json(output);
+    } else throw "Invalid Date";
   } catch (err) {
-    output = {
-      error: "Invalid Date",
+    //neither a date or a unix
+    console.log("its neither unix/date");
+    var output = {
+      error: err,
     };
   }
-
-  /*  var correctInputDate = RegExp(
-    /^(([1-9][0-9][0-9][0-9])|([1-9][0-9][0-9]))-([1-9]|0[1-9]|1[0-2])-([1-9]|0[1-9]|1[0-9]|2[0-9]|3[0-1])$/g
-  );
-  var correctInputUnix = RegExp(/^[\d]+$/g);
-
-  var isUnix = correctInputUnix.test(input); //test if the input is in correct UNIX format (only numbers)
-  var isDate = correctInputDate.test(input); //test if the input is in correct Date Format
-
-  if (isUnix || isDate) {
-    //input(date) is in UNIX format OR input (date) is in correct Date format
-    var output = {};
-    if (isUnix) {
-      //UNIX format
-      var unix = new Date(parseInt(input));
-      var utc = unix.toUTCString();
-      output.unix = parseInt(input);
-      output.utc = utc;
-    } else {
-      //DATE format
-      var utc = new Date(input).toUTCString();
-      var unix = new Date(input).getTime();
-      output.unix = unix;
-      output.utc = utc;
-    }
-  } else {
-    //input is neither UNIX or correct Date format
-    output = { error: "Invalid Date" };
-  } */
-
   res.json(output);
 });
 
