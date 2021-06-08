@@ -75,8 +75,8 @@ app.get("/api/:date", (req, res) => {
 app.get("/api", (req, res) => {
   var output = {};
   //empty string / empty variable
-  var utc,
-    unix = Date.now();
+  var utc = Date.now();
+  var unix = Date.now();
   output.unix = new Date(unix).getTime();
   output.utc = new Date(utc).toUTCString();
   res.send(output);
