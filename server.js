@@ -26,7 +26,21 @@ app.get("/api/hello", function (req, res) {
 app.get("/api/:date", (req, res) => {
   //check to see if correct input (Accepted format - YYYY-MM-DD/YYYY-M-D starting from: 1000-01-01 )
   var input = req.params.date;
-  var correctInputDate = RegExp(
+  var output = {};
+  try {
+    var date = new Date(input);
+    //if successful - its unix maybe?
+    output = {
+      unix: date.getTime(),
+      utc: date.toUTCString(),
+    };
+  } catch (err) {
+    output = {
+      error: "Invalid Date",
+    };
+  }
+
+  /*  var correctInputDate = RegExp(
     /^(([1-9][0-9][0-9][0-9])|([1-9][0-9][0-9]))-([1-9]|0[1-9]|1[0-2])-([1-9]|0[1-9]|1[0-9]|2[0-9]|3[0-1])$/g
   );
   var correctInputUnix = RegExp(/^[\d]+$/g);
@@ -53,7 +67,7 @@ app.get("/api/:date", (req, res) => {
   } else {
     //input is neither UNIX or correct Date format
     output = { error: "Invalid Date" };
-  }
+  } */
 
   res.json(output);
 });
